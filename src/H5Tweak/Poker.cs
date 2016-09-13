@@ -4,14 +4,32 @@ using System.Linq;
 
 using Binarysharp.MemoryManagement;
 using Binarysharp.MemoryManagement.Helpers;
+using System.Text.RegularExpressions;
 
 namespace H5Tweak
 {
     public static class Poker
     {
+        const string EXPECTED_VERSION = "1.114.4592.2";
+        static Regex versionRegex = new Regex(@"Microsoft.Halo5Forge_([0-9]+.[0-9]+.[0-9]+.[0-9]+)_x64__8wekyb3d8bbwe");
+
         private static Process getProcess()
         {
-            return ApplicationFinder.FromProcessName("halo5forge").FirstOrDefault();
+            Process proc = ApplicationFinder.FromProcessName("halo5forge").FirstOrDefault();
+
+            Match match = versionRegex.Match(proc.MainModule.FileName);
+            if (!match.Success)
+            {
+                throw new Exception("Unable to determine application version.");
+            }
+
+            String version = match.Groups[1].Value;
+            if (version != EXPECTED_VERSION)
+            {
+                throw new Exception(String.Format("Wrong version. Expected={0}. Actual={1}.", EXPECTED_VERSION, version));
+            }
+
+            return proc;
         }
 
         public static int GetFPS()
