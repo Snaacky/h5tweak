@@ -16,4 +16,4 @@ Removes default FPS cap and adds FOV slider for Halo 5: Forge.
 
 # Special thanks to:
 * xbox7887 for finding the addresses for FOV and FPS.
-* Wunkolo for publicizing them.
+* no1dead for publicizing them.
