@@ -1,6 +1,6 @@
 ﻿namespace H5Tweak
 {
-    partial class Main
+    partial class TweakUI
     {
         /// <summary>
         /// Required designer variable.
@@ -74,7 +74,7 @@
             this.tbFPS.Value = 60;
             this.tbFPS.Scroll += new System.EventHandler(this.trackBar2_Scroll);
             // 
-            // Main
+            // TweakUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -85,10 +85,10 @@
             this.Controls.Add(this.tbFOV);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.MaximizeBox = false;
-            this.Name = "Main";
+            this.Name = "TweakUI";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "H5Tweak";
-            this.Load += new System.EventHandler(this.Form1_Load);
+            this.Load += new System.EventHandler(this.TweakUI_Load);
             ((System.ComponentModel.ISupportInitialize)(this.tbFOV)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbFPS)).EndInit();
             this.ResumeLayout(false);
