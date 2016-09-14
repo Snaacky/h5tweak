@@ -22,11 +22,20 @@ namespace H5Tweak
             Poker.SetFOV(tbFOV.Value);
         }
 
+        bool tbFPSMoved = false;
         private void trackBar2_Scroll(object sender, EventArgs e)
         {
-            lblFPS.Text = "FPS: " + tbFPS.Value.ToString();
-            int fps = 1000000 / Convert.ToInt16(tbFPS.Value);
-            Poker.SetFPS(fps);
+            if (tbFPSMoved == false)
+            {
+                MessageBox.Show("Halo 5: Forge has its physics tied to its FPS. This function may cause instablity and other issues in game.", "H5Tweak", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                tbFPSMoved = true;
+            }
+            else
+            {
+                lblFPS.Text = "FPS: " + tbFPS.Value.ToString();
+                int fps = 1000000 / Convert.ToInt16(tbFPS.Value);
+                Poker.SetFPS(fps);
+            }
         }
 
         private void TweakUI_Load(object sender, EventArgs e)
@@ -72,7 +81,7 @@ namespace H5Tweak
         {
             // TODO: Find a way to launch Windows 10 apps automatically, sorry for manual solution!
             Process[] process = Process.GetProcessesByName("halo5forge");
-            DialogResult dialogResult = MessageBox.Show("To apply the custom resolution, the game must be restarted. Would you like to close the game now?", "H5Tweak", MessageBoxButtons.YesNo);
+            DialogResult dialogResult = MessageBox.Show("To apply the ultrawide resolution, the game must be restarted. Would you like to close the game now?", "H5Tweak", MessageBoxButtons.YesNo);
 
             if (dialogResult == DialogResult.Yes)
             {
@@ -98,7 +107,7 @@ namespace H5Tweak
         {
             // TODO: Find a way to launch Windows 10 apps automatically, sorry for manual solution!
             Process[] process = Process.GetProcessesByName("halo5forge");
-            DialogResult dialogResult = MessageBox.Show("To apply the custom resolution, the game must be restarted. Would you like to close the game now?", "H5Tweak", MessageBoxButtons.YesNo);
+            DialogResult dialogResult = MessageBox.Show("To apply the ultrawide resolution, the game must be restarted. Would you like to close the game now?", "H5Tweak", MessageBoxButtons.YesNo);
 
             if (dialogResult == DialogResult.Yes)
             {

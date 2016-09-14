@@ -1,11 +1,12 @@
 # H5Tweak
-Removes default FPS cap and adds FOV slider for Halo 5: Forge.
+Removes default FPS cap, adds FOV slider, and widescreen resolution support for Halo 5: Forge.
 
 # Screenshot
-![Screenshot](http://i.imgur.com/GjjdacN.png)
+![Screenshot](http://i.imgur.com/OUBxvxY.png)
 
 # Download
-[Version 1.0](https://github.com/Snaacky/H5Tweak/releases/tag/1.0)
+* [Version 1.05](https://github.com/Snaacky/H5Tweak/releases/tag/1.05)
+* [Version 1.0](https://github.com/Snaacky/H5Tweak/releases/tag/1.0)
 
 # YouTube video
 [![YouTube video](https://img.youtube.com/vi/l4z60fW4lmM/0.jpg)](https://www.youtube.com/watch?v=l4z60fW4lmM)
@@ -17,3 +18,4 @@ Removes default FPS cap and adds FOV slider for Halo 5: Forge.
 # Special thanks to:
 * xbox7887 for finding the addresses for FOV and FPS.
 * no1dead for publicizing them.
+* JohnnieButters for his help with testing.

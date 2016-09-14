@@ -76,6 +76,7 @@
             // 
             this.tbFPS.Location = new System.Drawing.Point(6, 96);
             this.tbFPS.Maximum = 300;
+            this.tbFPS.Minimum = 1;
             this.tbFPS.Name = "tbFPS";
             this.tbFPS.Size = new System.Drawing.Size(269, 45);
             this.tbFPS.TabIndex = 3;
@@ -108,7 +109,7 @@
             this.groupBox2.Size = new System.Drawing.Size(285, 60);
             this.groupBox2.TabIndex = 6;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Widescreen Support";
+            this.groupBox2.Text = "Ultrawide Support";
             // 
             // rb3440
             // 
