@@ -40,6 +40,21 @@ namespace H5Tweak
 
         private void TweakUI_Load(object sender, EventArgs e)
         {
+            bool isCurrent = Updater.CheckUpdate();
+            if (!(isCurrent))
+            {
+                DialogResult dialogResult = MessageBox.Show("A new update is available. Would you like to download it?", "H5Tweak", MessageBoxButtons.YesNo);
+
+                if (dialogResult == DialogResult.Yes)
+                {
+                    Process.Start("https://github.com/Snaacky/H5Tweak/releases");
+                }
+                else if (dialogResult == DialogResult.No)
+                {
+                    MessageBox.Show("You have decided not to update. H5Tweak may no longer function on this current version. We highly advise you update H5Tweak to the latest version.", "H5Tweak", MessageBoxButtons.OK);
+                }
+            }
+
             Process[] process = Process.GetProcessesByName("halo5forge");
 
             if (process.Length == 0)
@@ -59,6 +74,7 @@ namespace H5Tweak
 
             }
         }
+
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
