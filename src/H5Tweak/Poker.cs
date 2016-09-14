@@ -52,6 +52,33 @@ namespace H5Tweak
             }
         }
 
+        public static int GetResolutionWidth()
+        {
+            using (var m = new MemorySharp(getProcess()))
+            {
+                var resWidthPtr = new IntPtr(0x4E97F60);
+                return Convert.ToInt16(m[resWidthPtr].Read<int>());
+            }
+        }
+
+        public static void SetResolutionWidth(int width)
+        {
+            using (var m = new MemorySharp(getProcess()))
+            {
+                var resHeightPtr = new IntPtr(0x4E97F60);
+                m[resHeightPtr].Write<int>(width);
+            }
+        }
+
+        public static void SetAspectRatio(float aspectratio)
+        {
+            using (var m = new MemorySharp(getProcess()))
+            {
+                var fovPtr = new IntPtr(0x332FC18);
+                m[fovPtr].Write<float>(aspectratio);
+            }
+        }
+
         public static void SetFOV(float fov)
         {
             using (var m = new MemorySharp(getProcess()))
