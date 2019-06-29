@@ -1,5 +1,5 @@
 # H5Tweak
-Removes default FPS cap, adds FOV slider, and ultrawide resolution support for Halo 5: Forge.
+Removes the 60 FPS cap, adds field of view customization and ultra-wide screen support for Halo 5: Forge.
 
 # Requirements
 * Halo 5: Forge
