@@ -52,7 +52,6 @@
             this.tbFOV.Size = new System.Drawing.Size(269, 45);
             this.tbFOV.TabIndex = 0;
             this.tbFOV.Value = 78;
-            this.tbFOV.Scroll += new System.EventHandler(this.trackBar1_Scroll);
             // 
             // lblFOV
             // 
@@ -81,7 +80,6 @@
             this.tbFPS.Size = new System.Drawing.Size(269, 45);
             this.tbFPS.TabIndex = 3;
             this.tbFPS.Value = 60;
-            this.tbFPS.Scroll += new System.EventHandler(this.trackBar2_Scroll);
             // 
             // groupBox1
             // 

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Windows.Forms;
-using System.Linq;
-using Binarysharp.MemoryManagement;
-using Binarysharp.MemoryManagement.Helpers;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
+using System.IO;
+using System.Collections.Generic;
 
 namespace H5Tweak
 {
@@ -15,27 +15,17 @@ namespace H5Tweak
             InitializeComponent();
         }
 
-
-        private void trackBar1_Scroll(object sender, EventArgs e)
+        private void TrackBar1_Scroll(object sender, EventArgs e)
         {
             lblFOV.Text = "FOV: " + tbFOV.Value.ToString();
             Poker.SetFOV(tbFOV.Value);
         }
 
-        bool tbFPSMoved = false;
-        private void trackBar2_Scroll(object sender, EventArgs e)
+        private void TrackBar2_Scroll(object sender, EventArgs e)
         {
-            if (tbFPSMoved == false)
-            {
-                MessageBox.Show("Halo 5: Forge has its physics tied to its FPS. This function may cause instablity and other issues in game.", "H5Tweak", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                tbFPSMoved = true;
-            }
-            else
-            {
-                lblFPS.Text = "FPS: " + tbFPS.Value.ToString();
-                int fps = 1000000 / Convert.ToInt16(tbFPS.Value);
-                Poker.SetFPS(fps);
-            }
+            lblFPS.Text = "FPS: " + tbFPS.Value.ToString();
+            int fps = 1000000 / Convert.ToInt16(tbFPS.Value);
+            Poker.SetFPS(fps);
         }
 
         private void TweakUI_Load(object sender, EventArgs e)
@@ -56,17 +46,14 @@ namespace H5Tweak
 
                 int fps = Poker.GetFPS();
                 lblFPS.Text = "FPS: " + fps.ToString();
-                // tbFPS.Value = fps;
-                // TODO: Re-enable this when the FPS value is found.
+                tbFPS.Value = fps;
 
             }
         }
 
-
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
-            MessageBox.Show("This feature is experimental. Please report any issues on the GitHub issue tracker.", "H5Tweak", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            if (checkBox1.Checked == true)
+            if (checkBox1.Checked)
             {
                 rb2560.Enabled = true;
                 rb3440.Enabled = true;
@@ -79,40 +66,14 @@ namespace H5Tweak
             }
         }
 
-
         private void rb2560_CheckedChanged(object sender, EventArgs e)
         {
-            /* TODO: Find a way to launch Windows 10 apps automatically, sorry for manual solution!
-             * It's 2019 and we finding solutions:
-             * explorer.exe shell:appsFolder\Microsoft.Halo5Forge_8wekyb3d8bbwe!Ausar might work
-             * otherwise this might work: https://stackoverflow.com/a/51914388
-             */
-            Process[] process = Process.GetProcessesByName("halo5forge");
-            DialogResult dialogResult = MessageBox.Show("To apply the ultrawide resolution, the game must be restarted. Would you like to close the game now?", "H5Tweak", MessageBoxButtons.YesNo);
-
-            if (dialogResult == DialogResult.Yes)
-            {
-                process[0].Kill();
-                MessageBox.Show("Halo 5: Forge has been killed. Re-open the game and the resolution will be applied.", "H5Tweak");
-                process = Process.GetProcessesByName("halo5forge");
-                while (process.Length == 0)
-                {
-                   process = Process.GetProcessesByName("halo5forge");
-                   System.Threading.Thread.Sleep(1000);
-                }
-
-                for (int i = 1; i < 20; i++)
-                {
-                    Poker.SetResolutionWidth(2560);
-                    Poker.SetAspectRatio(2.37f);
-                    System.Threading.Thread.Sleep(1000);
-                }
-            }
+            // TODO: Might replace this system after it's done, either c&p from below or delete.
         }
 
         private void rb3440_CheckedChanged(object sender, EventArgs e)
         {
-            // TODO: Find a way to launch Windows 10 apps automatically, sorry for manual solution!
+            // TODO: Find a way to launch Windows 10 apps automatically
             Process[] process = Process.GetProcessesByName("halo5forge");
             DialogResult dialogResult = MessageBox.Show("To apply the ultrawide resolution, the game must be restarted. Would you like to close the game now?", "H5Tweak", MessageBoxButtons.YesNo);
 
@@ -120,20 +81,25 @@ namespace H5Tweak
             {
                 process[0].Kill();
                 MessageBox.Show("Halo 5: Forge has been killed. Re-open the game and the resolution will be applied.");
-                process = Process.GetProcessesByName("halo5forge");
-                while (process.Length == 0)
+
+                while (Process.GetProcessesByName("halo5forge").Length == 0)
                 {
-                    process = Process.GetProcessesByName("halo5forge");
                     System.Threading.Thread.Sleep(1000);
                 }
 
-                for (int i = 1; i < 20; i++)
+
+                while (!Poker.HasMenuResolutionUpdated())
                 {
                     Poker.SetResolutionWidth(3440);
-                    Poker.SetAspectRatio(2.37f);
-                    System.Threading.Thread.Sleep(1000);
+                    Poker.SetResolutionHeight(1440);
+                    Poker.SetAspectRatio(2.33f);
                 }
+
             }
+
+            MessageBox.Show("done");
+
         }
+
     }
 }
