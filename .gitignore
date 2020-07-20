@@ -50,3 +50,7 @@ Temporary Items
 .vs/
 obj/
 bin/
+
+# H5Tweak
+halo5forge.ct
+*.txt

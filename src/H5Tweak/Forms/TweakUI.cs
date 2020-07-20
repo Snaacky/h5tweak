@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Windows.Forms;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
-using System.IO;
-using System.Collections.Generic;
 
 namespace H5Tweak
 {
@@ -14,23 +10,9 @@ namespace H5Tweak
             InitializeComponent();
         }
 
-        private void TrackBar1_Scroll(object sender, EventArgs e)
-        {
-            lblFOV.Text = "FOV: " + tbFOV.Value.ToString();
-            Poker.SetFOV(tbFOV.Value);
-        }
-
-        private void TrackBar2_Scroll(object sender, EventArgs e)
-        {
-            lblFPS.Text = "FPS: " + tbFPS.Value.ToString();
-            int fps = 1000000 / Convert.ToInt16(tbFPS.Value);
-            Poker.SetFPS(fps);
-        }
-
         private void TweakUI_Load(object sender, EventArgs e)
         {
-
-            Process[] process = Process.GetProcessesByName("halo5forge");
+            var process = System.Diagnostics.Process.GetProcessesByName("halo5forge");
 
             if (process.Length == 0)
             {
@@ -72,7 +54,7 @@ namespace H5Tweak
         private void rb3440_CheckedChanged(object sender, EventArgs e)
         {
             // TODO: Find a way to launch Windows 10 apps automatically
-            Process[] process = Process.GetProcessesByName("halo5forge");
+            var process = System.Diagnostics.Process.GetProcessesByName("halo5forge");
             DialogResult dialogResult = MessageBox.Show("To apply the ultrawide resolution, the game must be restarted. Would you like to close the game now?", "H5Tweak", MessageBoxButtons.YesNo);
 
             if (dialogResult == DialogResult.Yes)
@@ -80,21 +62,42 @@ namespace H5Tweak
                 process[0].Kill();
                 MessageBox.Show("Halo 5: Forge has been killed. Re-open the game and the resolution will be applied.");
 
-                while (Process.GetProcessesByName("halo5forge").Length == 0)
+                /* TODO: Automatically kill and restart the game.
+                 * Requires the "Halo" app to be uninstalled but couldn't get the game
+                 * to launch *with it* installed so should be fine?
+                 * 
+                 * System.Diagnostics.Process h5 = new System.Diagnostics.Process();
+                 * h5.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                 * h5.StartInfo.FileName = "explorer.exe";
+                 * h5.StartInfo.Arguments = @"shell:appsFolder\Microsoft.Halo5Forge_8wekyb3d8bbwe!Ausar";
+                 * h5.Start(); 
+                */
+
+                while (System.Diagnostics.Process.GetProcessesByName("halo5forge").Length == 0)
                 {
                     System.Threading.Thread.Sleep(1000);
                 }
-
 
                 while (!Poker.HasMenuResolutionUpdated())
                 {
                     Poker.SetResolutionWidth(3440);
                     Poker.SetResolutionHeight(1440);
                     Poker.SetAspectRatio(2.33f);
+                    System.Threading.Thread.Sleep(100);
                 }
             }
+        }
 
-            MessageBox.Show("done");
+        private void tbFOV_Scroll(object sender, EventArgs e)
+        {
+            lblFOV.Text = "FOV: " + tbFOV.Value.ToString();
+            Poker.SetFOV(tbFOV.Value);
+        }
+
+        private void tbFPS_Scroll(object sender, EventArgs e)
+        {
+            lblFPS.Text = "FPS: " + tbFPS.Value.ToString();
+            Poker.SetFPS(1000000 / Convert.ToInt16(tbFPS.Value));
         }
     }
 }
