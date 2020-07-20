@@ -56,7 +56,8 @@ namespace H5Tweak
 
                 int fps = Poker.GetFPS();
                 lblFPS.Text = "FPS: " + fps.ToString();
-                tbFPS.Value = fps;
+                // tbFPS.Value = fps;
+                // TODO: Re-enable this when the FPS value is found.
 
             }
         }
@@ -81,7 +82,11 @@ namespace H5Tweak
 
         private void rb2560_CheckedChanged(object sender, EventArgs e)
         {
-            // TODO: Find a way to launch Windows 10 apps automatically, sorry for manual solution!
+            /* TODO: Find a way to launch Windows 10 apps automatically, sorry for manual solution!
+             * It's 2019 and we finding solutions:
+             * explorer.exe shell:appsFolder\Microsoft.Halo5Forge_8wekyb3d8bbwe!Ausar might work
+             * otherwise this might work: https://stackoverflow.com/a/51914388
+             */
             Process[] process = Process.GetProcessesByName("halo5forge");
             DialogResult dialogResult = MessageBox.Show("To apply the ultrawide resolution, the game must be restarted. Would you like to close the game now?", "H5Tweak", MessageBoxButtons.YesNo);
 

@@ -10,10 +10,10 @@ namespace H5Tweak
 {
     public static class Poker
     {
-        const string EXPECTED_VERSION = "1.114.4592.2";
+        const string EXPECTED_VERSION = "1.194.6192.2";
         static Regex versionRegex = new Regex(@"Microsoft.Halo5Forge_([0-9]+.[0-9]+.[0-9]+.[0-9]+)_x64__8wekyb3d8bbwe");
 
-        private static Process getProcess()
+        private static Process GetProcess()
         {
             Process proc = ApplicationFinder.FromProcessName("halo5forge").FirstOrDefault();
 
@@ -34,27 +34,27 @@ namespace H5Tweak
 
         public static int GetFPS()
         {
-            using (var m = new MemorySharp(getProcess()))
+            using (var m = new MemorySharp(GetProcess()))
             {
                 var fpsPtr = new IntPtr(0x34B8C50);
                 int[] integers = m.Read<int>(fpsPtr, 1);
-                int math = 1000000 / integers[0];
-                return math;
+                return 1000000 / integers[0];
             }
         }
 
+        // updated
         public static int GetFOV()
         {
-            using (var m = new MemorySharp(getProcess()))
+            using (var m = new MemorySharp(GetProcess()))
             {
-                var fovPtr = new IntPtr(0x58ECF90);
+                var fovPtr = new IntPtr(0x590E210);
                 return Convert.ToInt16(m[fovPtr].Read<float>());
             }
         }
 
         public static int GetResolutionWidth()
         {
-            using (var m = new MemorySharp(getProcess()))
+            using (var m = new MemorySharp(GetProcess()))
             {
                 var resWidthPtr = new IntPtr(0x4E97F60);
                 return Convert.ToInt16(m[resWidthPtr].Read<int>());
@@ -63,7 +63,7 @@ namespace H5Tweak
 
         public static void SetResolutionWidth(int width)
         {
-            using (var m = new MemorySharp(getProcess()))
+            using (var m = new MemorySharp(GetProcess()))
             {
                 var resHeightPtr = new IntPtr(0x4E97F60);
                 m[resHeightPtr].Write<int>(width);
@@ -72,25 +72,26 @@ namespace H5Tweak
 
         public static void SetAspectRatio(float aspectratio)
         {
-            using (var m = new MemorySharp(getProcess()))
+            using (var m = new MemorySharp(GetProcess()))
             {
                 var fovPtr = new IntPtr(0x332FC18);
                 m[fovPtr].Write<float>(aspectratio);
             }
         }
 
+        //updated
         public static void SetFOV(float fov)
         {
-            using (var m = new MemorySharp(getProcess()))
+            using (var m = new MemorySharp(GetProcess()))
             {
-                var fovPtr = new IntPtr(0x58ECF90);
+                var fovPtr = new IntPtr(0x590E210);
                 m[fovPtr].Write<float>(fov);
             }
         }
 
         public static void SetFPS(int fps)
         {
-            using (var m = new MemorySharp(getProcess()))
+            using (var m = new MemorySharp(GetProcess()))
             {
                 var fovPtr = new IntPtr(0x34B8C50);
                 var fovPtr1 = new IntPtr(0x34B8C60);
