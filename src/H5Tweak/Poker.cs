@@ -35,7 +35,6 @@ namespace H5Tweak
             return proc;
         }
 
-        // updated
         public static int GetFPS()
         {
             using (var m = new MemorySharp(GetProcess()))
@@ -44,7 +43,6 @@ namespace H5Tweak
             }
         }
 
-        // updated
         public static int GetFOV()
         {
             using (var m = new MemorySharp(GetProcess()))
@@ -53,7 +51,6 @@ namespace H5Tweak
             }
         }
 
-        // updated
         public static bool HasMenuResolutionUpdated()
         {
 
@@ -65,7 +62,6 @@ namespace H5Tweak
             }
         }
 
-        // updated
         public static int GetResolutionWidth()
         {
             using (var m = new MemorySharp(GetProcess()))
@@ -74,7 +70,6 @@ namespace H5Tweak
             }
         }
 
-        // updated
         public static void SetResolutionWidth(int width)
         {
             using (var m = new MemorySharp(GetProcess()))
@@ -92,7 +87,6 @@ namespace H5Tweak
             }
         }
 
-        // updated
         public static void SetResolutionHeight(int height)
         {
             using (var m = new MemorySharp(GetProcess()))
@@ -111,7 +105,6 @@ namespace H5Tweak
             }
         }
 
-        // updated
         public static void SetAspectRatio(float ratio)
         {
             using (var m = new MemorySharp(GetProcess()))
@@ -120,7 +113,6 @@ namespace H5Tweak
             }
         }
 
-        // updated
         public static void SetFOV(float fov)
         {
             using (var m = new MemorySharp(GetProcess()))
@@ -129,7 +121,6 @@ namespace H5Tweak
             }
         }
 
-        // updated
         public static void SetFPS(int fps)
         {
             using (var m = new MemorySharp(GetProcess()))

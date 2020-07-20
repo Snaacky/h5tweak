@@ -9,7 +9,6 @@ namespace H5Tweak
 {
     public partial class TweakUI : Form
     {
-
         public TweakUI()
         {
             InitializeComponent();
@@ -47,7 +46,6 @@ namespace H5Tweak
                 int fps = Poker.GetFPS();
                 lblFPS.Text = "FPS: " + fps.ToString();
                 tbFPS.Value = fps;
-
             }
         }
 
@@ -94,12 +92,9 @@ namespace H5Tweak
                     Poker.SetResolutionHeight(1440);
                     Poker.SetAspectRatio(2.33f);
                 }
-
             }
 
             MessageBox.Show("done");
-
         }
-
     }
 }
