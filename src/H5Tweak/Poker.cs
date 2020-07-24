@@ -1,42 +1,42 @@
-﻿using System;
-using System.Linq;
-using System.Text.RegularExpressions;
-using Process.NET;
+﻿using Process.NET;
 using Process.NET.Memory;
+using System;
+using System.Linq;
 
 namespace H5Tweak
 {
     public class Poker
     {
-        private const string EXPECTED_VERSION = "1.194.6192.2";
-        private static readonly Regex versionRegex = new Regex(@"Microsoft.Halo5Forge_([0-9]+.[0-9]+.[0-9]+.[0-9]+)_x64__8wekyb3d8bbwe");
 
         public static ProcessSharp GetProcess()
         {
-            var h5forge = System.Diagnostics.Process.GetProcessesByName("halo5forge").FirstOrDefault();
-
-            Match match = versionRegex.Match(h5forge.MainModule.FileName);
-            if (!match.Success)
-            {
-                throw new Exception("Unable to determine application version.");
-            }
-
-            string version = match.Groups[1].Value;
-            if (version != EXPECTED_VERSION)
-            {
-                throw new Exception(string.Format("H5Tweak does not support the installed version of H5Tweak. Expected={0}. Installed={1}.", EXPECTED_VERSION, version));
-            }
-
-            var process = new ProcessSharp(h5forge, Process.NET.Memory.MemoryType.Remote);
+            var process = new ProcessSharp(System.Diagnostics.Process.GetProcessesByName("halo5forge").FirstOrDefault(), MemoryType.Remote);
             process.Memory = new ExternalProcessMemory(process.Handle);
             return process;
+        }
+
+        public static IntPtr GetModuleBase()
+        {
+            using (ProcessSharp proc = GetProcess())
+            {
+                // Once in a while, this previously returned a "successful" exception. 
+                // This hopefully fixes that.
+                try
+                {
+                    return proc["halo5forge.exe"].BaseAddress;
+                } 
+                catch (System.ComponentModel.Win32Exception)
+                {
+                    return GetModuleBase();
+                }
+            }
         }
 
         public static int GetFPS()
         {
             using (ProcessSharp proc = GetProcess())
             {
-                return 1000000 / proc.Memory.Read<int>((IntPtr)0x7FF696665078);
+                return 1000000 / proc.Memory.Read<int>(IntPtr.Add(GetModuleBase(), 0x3425078));
             }
         }
 
@@ -44,39 +44,49 @@ namespace H5Tweak
         {
             using (ProcessSharp proc = GetProcess())
             {
-                return Convert.ToInt16(proc.Memory.Read<float>((IntPtr)0x7FF698B4E210));
+                return Convert.ToInt32(proc.Memory.Read<float>(IntPtr.Add(GetModuleBase(), 0x590E210)));
             }
         }
 
-        public static bool HasMenuResolutionUpdated()
+        public static bool HasFOVBeenSet()
         {
-            using (ProcessSharp proc = GetProcess())
-            {
-                return proc.Memory.Read<int>((IntPtr)0x7FF69944BF7C) != 0;
-            }
-        }
-
-        public static int GetResolutionWidth()
-        {
-
-            using (ProcessSharp proc = GetProcess())
-            {
-                return proc.Memory.Read<int>((IntPtr)0x7FF697A97614);
-            }
+            return GetFOV() != 0;
         }
 
         public static void SetResolutionWidth(int width)
         {
             using (ProcessSharp proc = GetProcess())
             {
-                IntPtr[] widthAddresses = { (IntPtr)0x7FF697A97610, (IntPtr)0x7FF697A9761C,
-                                            (IntPtr)0x7FF697A97648, (IntPtr)0x7FF699381944,
-                                            (IntPtr)0x7FF6992E7448, (IntPtr)0x7FF6992EF660,
-                                            (IntPtr)0x7FF699450FDC, (IntPtr)0x7FF6995F146C };
+                int[] widthAddresses = {  0x4857610, 0x485761C,
+                                          0x4857648, 0x6141944,
+                                          0x60A7448, 0x60AF660,
+                                          0x6210FDC, 0x63B146C,
+                                          0x60A7448, 0x60AF660,
+                                          0x4856520, 0x4857634,
+                                          0x48577C4, 0x488C378,
+                                          0x58FE228, 0x61B54B8,
+                                          0x61D6158, 0x48B4310 };
 
-                foreach (IntPtr address in widthAddresses)
+                int[] widthAddresses2 = { 0x60A7448, 0x60AF660,
+                                          0x626B868, 0x626B850,
+                                          0x626B840, 0x626B8B0,
+                                          0x626B958, 0x626B8C8,
+                                          0x489BCB8, 0x626BA90,
+                                          0x626B940, 0x626BAF0,
+                                          0x626BB58, 0x626BB08,
+                                          0x626BAA8, 0x48B480C,
+                                          0x626BB98, 0x626BB70,
+                                          0x626BB80, 0x626B828,
+                                          0x489C0D0 };
+
+                foreach (int address in widthAddresses)
                 {
-                    proc.Memory.Write(address, width);
+                    proc.Memory.Write(IntPtr.Add(GetModuleBase(), address), width);
+                }
+
+                foreach (int address in widthAddresses2) 
+                {
+                   proc.Memory.Write<float>(IntPtr.Add(GetModuleBase(), address), (float)Convert.ToDouble(width));
                 }
             }
         }
@@ -85,15 +95,50 @@ namespace H5Tweak
         {
             using (ProcessSharp proc = GetProcess())
             {
-                IntPtr[] heightAddresses = { (IntPtr)0x7FF697A97614, (IntPtr)0x7FF697A97620,
-                                             (IntPtr)0x7FF697A9764C, (IntPtr)0x7FF697ACC374,
-                                             (IntPtr)0x7FF699381948, (IntPtr)0x7FF6992E744C,
-                                             (IntPtr)0x7FF6992EF664, (IntPtr)0x7FF699450FE0,
-                                             (IntPtr)0x7FF6995F1470 };
+                int[] heightAddresses = {   0x4857614, 0x4857620,
+                                            0x485764C, 0x488C374,
+                                            0x6141948, 0x60A744C,
+                                            0x60AF664, 0x620BF7C,
+                                            0x6210FE0, 0x63B1470,
+                                            0x5A56D00, 0x46DF780,
+                                            0x5A56D00, 0x46DF780,
+                                            0x485652C, 0x4856544,
+                                            0x485653C, 0x485654C,
+                                            0x4856534, 0x4856524,
+                                            0x485766C, 0x4856554,
+                                            0x488C37C, 0x61B33E8,
+                                            0x49BAE58, 0x623C4D8,
+                                            0x48577C8, 0x61C5AD8,
+                                            0x4857638, 0x485654C,
+                                            0x4856554, 0x4857638,
+                                            0x48577C8, 0x488C37C,
+                                            0x49BAE58, 0x4856524,
+                                            0x61B33E8, 0x623C4D8,
+                                            0x4856544, 0x485652C,
+                                            0x46DF780, 0x485653C,
+                                            0x4856534 };
 
-                foreach (IntPtr address in heightAddresses)
+                int[] heightAddresses2 = { 0x60A744C, 0x60AF664,
+                                           0x489BCBC, 0x48B4810,
+                                           0x5F99CC8, 0x489C0D4,
+                                           0x5F99CD4, 0x626B82C,
+                                           0x626B854, 0x626B844,
+                                           0x626B8B4, 0x626B95C,
+                                           0x626BA94, 0x626B944,
+                                           0x626BAF4, 0x626BB0C,
+                                           0x626B86C, 0x626BB74,
+                                           0x626BAAC, 0x626BB84,
+                                           0x626BB5C, 0x626BB9C,
+                                           0x626B8CC };
+
+                foreach (int address in heightAddresses)
                 {
-                    proc.Memory.Write<int>(address, height);
+                    proc.Memory.Write(IntPtr.Add(GetModuleBase(), address), height);
+                }
+
+                foreach (int address in heightAddresses2)
+                {
+                    proc.Memory.Write<float>(IntPtr.Add(GetModuleBase(), address), (float)Convert.ToDouble(height));
                 }
             }
         }
@@ -102,7 +147,7 @@ namespace H5Tweak
         {
             using (ProcessSharp proc = GetProcess())
             {
-                proc.Memory.Write((IntPtr)0x7FF697A975F0, ratio);
+                proc.Memory.Write(IntPtr.Add(GetModuleBase(), 0x48575F0), ratio);
             }
         }
 
@@ -110,7 +155,7 @@ namespace H5Tweak
         {
             using (ProcessSharp proc = GetProcess())
             {
-                proc.Memory.Write((IntPtr)0x7FF698B4E210, fov);
+                proc.Memory.Write(IntPtr.Add(GetModuleBase(), 0x590E210), fov);
             }
         }
 
@@ -118,10 +163,10 @@ namespace H5Tweak
         {
             using (ProcessSharp proc = GetProcess())
             {
-                IntPtr[] fpsAddresses = { (IntPtr)0x7FF696665078, (IntPtr)0x7FF696665088, (IntPtr)0x7FF696665098 };
-                foreach (IntPtr address in fpsAddresses)
+                int[] fpsAddresses = { 0x3425078, 0x3425088, 0x3425098 };
+                foreach (int address in fpsAddresses)
                 {
-                    proc.Memory.Write(address, fps);
+                    proc.Memory.Write(IntPtr.Add(GetModuleBase(), address), fps);
                 }
             }
         }
